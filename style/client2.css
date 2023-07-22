@@ -1566,13 +1566,12 @@ a.ilink.yours {
 	display: block;
 	position: absolute;
 	top: 4px;
-	left: 151px;
+
 	font-size: 14px;
 	padding: 3px 6px;
 }
 .small-layout .battle-chat-toggle[name=showChat] {
-	left: auto;
-	right: 6px;
+
 }
 .small-layout.showing-chat .battle,
 .small-layout.showing-chat .battle-controls {

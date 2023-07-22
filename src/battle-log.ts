@@ -278,6 +278,18 @@ export class BattleLog {
 			if (this.scene) this.scene.wait(1000);
 			return;
 
+			case 'notstarted':
+				this.message('<strong>The Battle will initiate once all player slots are filled' );
+				break;
+
+			case 'slotupdate' : {
+				if(BattleLog.escapeHTML(args[1]).length < 2) { this.message('<i>(Slots remaining :' + BattleLog.escapeHTML(args[1]) + ')') }
+				else {
+					this.message('<strong> All slots are filled, Battle has initiated!');
+				}
+				break;
+			}
+
 		case 'variation':
 			this.addDiv('', '<small>Variation: <em>' + BattleLog.escapeHTML(args[1]) + '</em></small>');
 			break;

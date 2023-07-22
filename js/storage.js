@@ -532,12 +532,12 @@ Storage.initTestClient = function () {
 				data.sid = sid;
 				get(uri, data, callback, type);
 			} else {
-				app.addPopup(ProxyPopup, {uri: uri, callback: callback});
+				//app.addPopup(ProxyPopup, {uri: uri, callback: callback});
 			}
 		};
 		var post = $.post;
 		$.post = function (uri, data, callback, type) {
-			if (type === 'html') {
+			if (type === 'html') {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 				uri += '&testclient';
 			}
 			if (uri[0] === '/') { //relative URI
@@ -554,7 +554,7 @@ Storage.initTestClient = function () {
 					src += '<input type=hidden name="' + i + '" value="' + BattleLog.escapeHTML(data[i]) + '">';
 				}
 				src += '<input type=submit value="Please click this button first."></form></body></html>';
-				app.addPopup(ProxyPopup, {uri: "data:text/html;charset=UTF-8," + encodeURIComponent(src), callback: callback});
+				//app.addPopup(ProxyPopup, {uri: "data:text/html;charset=UTF-8," + encodeURIComponent(src), callback: callback});
 			}
 		};
 		Storage.whenPrefsLoaded.load();

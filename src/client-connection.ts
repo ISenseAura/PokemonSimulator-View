@@ -17,7 +17,8 @@ class PSConnection {
 	connect() {
 		const server = PS.server;
 		const port = server.protocol === 'https' ? '' : ':' + server.port;
-		const url = server.protocol + '://' + server.host + port + server.prefix;
+		const url = "http://localhost:8000" + server.prefix;
+		console.log("@@@@ - " + url)
 		const socket = this.socket = new SockJS(url, [], {timeout: 5 * 60 * 1000});
 		socket.onopen = () => {
 			console.log('\u2705 (CONNECTED)');
@@ -48,9 +49,11 @@ class PSConnection {
 	}
 	send(msg: string) {
 		if (!this.connected) {
+			console.log("@@@@@@ - " + msg)
 			this.queue.push(msg);
 			return;
 		}
+		console.log("@@@@@@ - " + msg)
 		this.socket.send(msg);
 	}
 }

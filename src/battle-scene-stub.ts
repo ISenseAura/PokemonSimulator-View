@@ -14,6 +14,7 @@ export class BattleSceneStub {
 	log: BattleLog = {add: (args: Args, kwargs?: KWArgs) => {}} as any;
 	$frame?: JQuery;
 
+	
 	abilityActivateAnim(pokemon: Pokemon, result: string): void { }
 	addPokemonSprite(pokemon: Pokemon): PokemonSprite { return null!; }
 	addSideCondition(siden: number, id: ID, instant?: boolean | undefined): void { }

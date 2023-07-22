@@ -325,9 +325,9 @@ interface PSGroup {
 }
 
 class PSServer {
-	id = Config.defaultserver.id;
-	host = Config.defaultserver.host;
-	port = Config.defaultserver.port;
+	id = '';
+	host = "localhost";
+	port = 8000;
 	altport = Config.defaultserver.altport;
 	registered = Config.defaultserver.registered;
 	prefix = '/showdown';

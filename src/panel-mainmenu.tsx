@@ -294,7 +294,8 @@ class MainMenuPanel extends PSRoomPanel<MainMenuRoom> {
 		(this.base!.querySelector('button.big') as HTMLButtonElement).focus();
 	}
 	submit = (e: Event) => {
-		alert('todo: implement');
+		console.log("testttttt");
+		alert('M');
 	};
 	handleDragStart = (e: DragEvent) => {
 		const roomid = (e.currentTarget as HTMLElement).getAttribute('data-roomid') as RoomID;

@@ -1,3 +1,4 @@
+
 (function ($) {
 
 	this.RoomsRoom = Room.extend({

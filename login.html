@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+
+		<title>  using Html &amp; CSS Only</title>
+
+		<link rel="stylesheet" href="./index.css" />
+		<script src="/config/config.js"></script>
+	
+	</head>
+
+	<body>
+		<!-- partial:index.partial.html -->
+
+		<section>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+			<span></span> <span></span> <span></span> <span></span> <span></span>
+
+			<div class="signin">
+				<div class="content">
+					<h2>Login</h2>
+
+					<div class="form">
+						<div class="inputBox">
+							<input type="text" id="code" required /> <i>Enter username</i>
+						</div>
+
+						<div class="inputBox">
+							<input type="password" id="pass" required /> <i>Enter password</i>
+						</div>
+
+			
+						<div class="inputBox">
+							<input type="submit" onClick="joinB()" value="Login" />
+						</div>
+					</div>
+				</div>
+			</div>
+	</section>
+	<script src="./socketevents.js"> </script>
+		<script>
+
+
+function joinB() {
+  let name = document.getElementById("code").value.trim();
+  let pass = document.getElementById("pass").value;
+
+  
+  if(name.length < 3) {
+alert("Please choose name with minimum of 3 letters")
+return
+   }
+
+   ws.send("%login%" + name + "%" + pass);
+
+
+}
+
+
+		</script>
+	</body>
+</html>

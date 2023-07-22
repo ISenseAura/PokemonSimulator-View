@@ -12,6 +12,7 @@
  * @license MIT
  */
 
+
 interface BattleRequestSideInfo {
 	name: string;
 	id: 'p1' | 'p2' | 'p3' | 'p4';

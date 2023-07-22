@@ -190,7 +190,7 @@
 				this.$tabbar.append('<div class="overflow" aria-hidden="true"><button name="tablist" class="button" aria-label="More"><i class="fa fa-caret-down"></i></button></div>');
 			}
 
-			if (app.rooms['']) app.rooms[''].updateRightMenu();
+		//	if (app.rooms['']) app.rooms[''].updateRightMenu();
 		},
 		updateTabbarMini: function () {
 			this.$('.logo').hide();
