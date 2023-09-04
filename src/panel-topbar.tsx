@@ -146,6 +146,7 @@ class PSHeader extends preact.Component<{style: {}}> {
 		case 'rooms':
 			icon = <i class="fa fa-plus" style="margin:7px auto -6px auto"></i>;
 			title = '';
+			
 			break;
 		case 'battle':
 			let idChunks = id.substr(7).split('-');

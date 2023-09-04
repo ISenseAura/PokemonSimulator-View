@@ -1057,12 +1057,7 @@ function toId() {
 			var altport = Config.server.port === Config.server.altport;
 			var altprefix = false;
 
-			this.socket.onopen = function () {
-				socketopened = true;
-				if (altport && window.ga) {
-					ga("send", "event", "Alt port connection", Config.server.id);
-				}
-			};
+			
 		},
 
 		connect: function () {
@@ -1143,24 +1138,35 @@ function toId() {
 
 			this.socket.onopen = function () {
 				let battles = JSON.parse(localStorage.getItem("battles"));
+				let replays = JSON.parse(localStorage.getItem("replays"));
 
 				self.send("%validateToken%" + localStorage.getItem("token"));
 				
+				if(replays) {
+					replays.forEach((r) => {
+						if(r) self.send("/viewreplay " + r)
+					})
+				}
+
+				localStorage.removeItem("replays")
+
 				console.log(battles);
-				self.send("testtt");
+				
 				battles.forEach((battle) => {
 					if (!battle) {
 						//Do battle expiration stuff here later
 					} else {
+						let u = localStorage.getItem("user");
 						let code = battle.split("-")[2];
 						let parts = JSON.parse(localStorage.getItem("parts"));
 						let part = "spect";
 						self.addRoom(battle.trim(), "BattleType", false);
+						self.joinRoom(battle.trim())
 						if(parts[code]) {
 						self.rooms[battle.trim()].receive("|notstarted|")
 						self.rooms[battle.trim()].receive("|slotupdate|1")
 						part = "part";
-						self.rooms[battle.trim()].receive("|j|"+ self.user.name)
+						self.rooms[battle.trim()].receive("|j|"+ (user ? user.name : "Guest"))
 						} 
 						else {
 							self.rooms[battle.trim()].receive("|notstarted|")
@@ -1319,6 +1325,23 @@ function toId() {
 				e.stopPropagation();
 			}
 		},
+
+
+		removeBattle(id) {
+			
+			let battles = JSON.parse(localStorage.getItem("battles"));
+			let parts = JSON.parse(localStorage.getItem("parts"));
+			console.log("Removing Battle " + id);
+			console.log(battles);
+			if(battles[id]) battles[id] = null;
+			if(parts[[id.startsWith("battle") ? id.split("-")[2] : id]]) delete parts[id.startsWith("battle") ? id.split("-")[2] : id];
+			localStorage.setItem("battles",JSON.stringify(battles));
+			localStorage.setItem("parts",JSON.stringify(parts));
+		},
+
+
+
+
 		/**
 		 * Send team to sim server
 		 */
@@ -1339,23 +1362,137 @@ function toId() {
 			var autojoined = false;
 
 			console.log("@@-" + data);
+
+			if(data.startsWith("|popup|")) {
+				app.addPopupMessage(data.split("|")[2]);
+			}
+
+
 			if(data.startsWith("/error")) {
 
 				if(data.toLowerCase().includes("battle") && data.toLowerCase().includes("exist") ) {
 					let battles = JSON.parse(localStorage.getItem("battles"));
 					let i = battles.indexOf(data.split("|")[1]);
 					battles[i] = null;
-					localStorage.setItem("battles",JSON.stringify(battles));
+				//	app.removeBattle(data.split("|")[1]);
+					
+					app.addPopupMessage("Battle " + "(" + data.split("|")[1] + ")" + " does not exist");
 				}
 			}
+
+			
+			if(data.startsWith("%viewreplay%")){
+				let battle = data.split("%")[2].replace(">","");
+				//let code = data.split(" ")[1].split("-")[2];
+						app.addRoom(battle.trim(), "BattleType", false);
+						app.joinRoom(battle.trim());
+						this.send("/viewreplay |" + battle.trim())
+						//self.rooms[battle.trim()].receive("|j|"+ self.user.name)
+						return;
+			}
+			
+
+
+			if(data.startsWith("%j")) {
+				let battle = data.split("%")[2];
+				let secret = battle.split("-")[2];
+				
+				console.log(localStorage.getItem("replays"));
+		
+
+				console.log(battle);
+				let replays = localStorage.getItem("replays") ? JSON.parse(localStorage.getItem("replays")) : [];
+				if((!replays.includes(battle) || !app.rooms[battle]) && battle.endsWith("replay")) {
+					replays.push(battle)
+				console.log(replays);
+				localStorage.setItem("replays",JSON.stringify(replays));
+				console.log(localStorage.getItem("replays"));
+
+				if(replays) {
+					replays.forEach((r) => {
+						if(r) app.send("/viewreplay " + r)
+					})
+				}
+				return;
+			}
+
+				let battles = localStorage.getItem("battles") ? JSON.parse(localStorage.getItem("battles")) : [];
+				if(!battles.includes(battle) && !battle.endsWith("replay")) battles.push(battle)
+				console.log(battles);
+				localStorage.setItem("battles",JSON.stringify(battles));
+				console.log(localStorage.getItem("battles"));
+
+				
+					let u = localStorage.getItem("user");
+					let code = battle.split("-")[2];
+					let parts = JSON.parse(localStorage.getItem("parts"));
+					let part = "spect";
+					app.addRoom(battle.trim(), "BattleType", false);
+					app.joinRoom(battle.trim())
+					if(parts[code]) {
+					app.rooms[battle.trim()].receive("|notstarted|")
+					app.rooms[battle.trim()].receive("|slotupdate|1")
+					part = "part";
+					app.rooms[battle.trim()].receive("|j|"+ (user ? user.name : "Guest"))
+					} 
+					else {
+						app.rooms[battle.trim()].receive("|notstarted|")
+						app.rooms[battle.trim()].receive("|slotupdate|2")
+						app.rooms[battle.trim()].receive("|j|"+ app.user.name)
+					}
+			
+				
+			
+			}
+
+			
+	if (data.startsWith("%")) {
+		let data1 = event.data;
+		let data = data1.split("%");
+		
+		let battles = localStorage.getItem("battles") ? JSON.parse(localStorage.getItem("battles")) : [];
+		switch (data[1]) {
+
+            case "nobattle" : {
+				let battles = JSON.parse(localStorage.getItem("battles"))
+				if(battles) {
+				for(let i = 0;i < battles.length;i++) {
+					
+					if(battles[i]) { 
+						if(battles[i].endsWith(data[2])) battles[i] = null;
+					}
+				}
+				localStorage.setItem("battles",JSON.stringify(battles))
+			}
+                app.addPopupMessage("Battle Code (" + data[2] + ")" + " is invalid or expired");
+            }
+            break;
+
+			case "noreplay" : {
+				let replays = JSON.parse(localStorage.getItem("replays"))
+				if(replays) {
+				for(let i = 0;i < battles.length;i++) {
+					
+					if(replays[i]) { 
+						if(replays[i].endsWith(data[2])) replays[i] = null;
+					}
+				}
+				localStorage.setItem("replays",JSON.stringify(replays))
+			}
+                app.addPopupMessage("Replay  (" + data[2] + ")" + " does not exist");
+            }
+            break;
+		}
+	}
+
+			
 
 
 			if(data.startsWith("/j")){
 				let battle = data.split(" ")[1];
 				let code = data.split(" ")[1].split("-")[2];
 						app.addRoom(battle.trim(), "BattleType", false);
-						app.rooms[battle.trim()].receive("|notstarted|")
-						app.rooms[battle.trim()].receive("|slotupdate|2")
+						app.joinRoom(battlee.trim());
 						//self.rooms[battle.trim()].receive("|j|"+ self.user.name)
 						return;
 			}
@@ -2058,6 +2195,7 @@ function toId() {
 		curSideRoom: null,
 		sideRoom: null,
 		joinRoom: function (id, type, nojoin) {
+			if(id == "rooms") return app.addPopup(JoinRoomPopup);;
 			if (this.rooms[id]) {
 				this.focusRoom(id);
 				if (this.rooms[id].rejoin) this.rooms[id].rejoin();
@@ -2082,12 +2220,15 @@ function toId() {
 			this.joinRoom(id);
 		},
 		addRoom: function (id, type, nojoin, title) {
+			console.log(id);
+			if(id == "rooms") return;
 			this._addRoom(id, type, nojoin, title);
 			this.updateSideRoom();
 			this.updateLayout();
 		},
 		_addRoom: function (id, type, nojoin, title) {
 			var oldRoom;
+
 			if (this.rooms[id]) {
 				if (type && this.rooms[id].type !== type) {
 					// this room changed type

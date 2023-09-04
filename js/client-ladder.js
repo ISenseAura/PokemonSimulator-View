@@ -11,6 +11,7 @@
 			this.$el.addClass('ps-room-light').addClass('scrollable');
 			this.$el.html('<div class="pad"><p>Page unavailable</p></div>');
 		},
+		
 		send: function (data) {
 			// HTML rooms don't actually exist server side, so send globally
 			app.send(data);

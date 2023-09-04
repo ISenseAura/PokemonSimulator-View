@@ -137,63 +137,6 @@
 		app.connect();
 		app.user = new User();
 
-	
-		
-		try {
-		app.send("/tett")
-		} 
-		catch(e) {
-			console.log(e);
-		}
-		let bt = new BattleRoom();
-		app.addRoom('');
-		app.addRoom("battle-gen9randombattle-1899991734","BattleType",false);
-		let a = `|init|battle
-|title|Serena vs. Mayurr
-|j|☆Serena
-|j|☆Mayurr
-|t:|1688795532
-|gametype|singles
-|player|p1|Serena|266|
-|player|p2|Mayurr|102|
-|teamsize|p1|6
-|teamsize|p2|6
-|gen|9
-|tier|[Gen 9] Random Battle
-|rule|Species Clause: Limit one of each Pokémon
-|rule|HP Percentage Mod: HP is shown in percentages
-|rule|Sleep Clause Mod: Limit one foe put to sleep
-|
-|t:|1688795532
-|start
-|switch|p1a: Groudon|Groudon, L74|100/100
-|switch|p2a: Garchomp|Garchomp, L76, M|100/100
-|-weather|SunnyDay|[from] ability: Drought|[of] p1a: Groudon
-|turn|1
-|l|☆Serena
-|player|p1|
-|l|☆Mayurr
-|player|p2|
-|j|☆Mayurr
-|player|p2|Mayurr|102
-|j|☆Serena
-|player|p1|Serena|266
-|l|☆Serena
-|player|p1|
-|l|☆Mayurr
-|player|p2|
-|j|☆Mayurr
-|player|p2|Mayurr|102
-|j|☆Serena
-|player|p1|Serena|266
-|l|☆Serena
-|player|p1|`.split("\n");
-
-a.forEach((b) => {
-	app.rooms['battle-gen9randombattle-1899991734'].receive(b);
-})
-
-
 	}
 
 

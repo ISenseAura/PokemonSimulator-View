@@ -2347,7 +2347,7 @@ ChatHistory.prototype.down = function (line) {
 		battleEnded: false,
 		join: function () {
 			console.log("testtJ");
-			//app.send('/join ' + this.id);
+			app.send('/join ' + this.id);
 		},
 		showChat: function () {
 			this.$('.battle-chat-toggle').attr('name', 'hideChat').html('Battle <i class="fa fa-caret-right"></i>');
@@ -2503,6 +2503,8 @@ ChatHistory.prototype.down = function (line) {
 				} else if (logLine.substr(0, 5) === '|win|' || logLine === '|tie') {
 					this.battleEnded = true;
 					this.battle.stepQueue.push(logLine);
+					console.log(this.id)
+				//	app.removeBattle(this.id);
 				} else if (logLine.substr(0, 6) === '|chat|' || logLine.substr(0, 3) === '|c|' || logLine.substr(0, 4) === '|c:|' || logLine.substr(0, 9) === '|chatmsg|' || logLine.substr(0, 10) === '|inactive|') {
 					this.battle.instantAdd(logLine);
 				} else {

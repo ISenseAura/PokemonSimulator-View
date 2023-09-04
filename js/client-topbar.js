@@ -233,6 +233,8 @@
 			}
 			if ($target.hasClass('closebutton')) {
 				app.leaveRoom(id, e);
+			} else if (id == '' || id == "rooms") {
+				return;
 			} else {
 				app.joinRoom(id);
 			}
@@ -309,7 +311,7 @@
 				}
 			}
 
-			if (roomid === 'rooms') i = app.draggingRoomList.length;
+			if (roomid === 'rooms') return app.addPopup(JoinRoomPopup);
 			if (i < 0) i = 0;
 
 			var draggingRight = (i > app.draggingLoc);
@@ -984,6 +986,55 @@
 		}
 	});
 
+	var JoinRoomPopup = this.JoinRoomPopup = Popup.extend({
+		type: 'modal',
+		initialize: function (data) {
+			var buf = '<form>';
+			if (data.error) {
+				buf += '<p class="error">' + data.error + '</p>';
+			} else if (data.reason) {
+				buf += '<p>' + data.reason + '</p>';
+			} else {
+				buf += '<p>Join a Battle or Watch replay:</p>';
+			}
+			buf += '<p><label class="label">Username: <strong><input type="text" name="name" value="' + BattleLog.escapeHTML(data.name || app.user.get('name')) + '" style="color:inherit;background:transparent;border:0;font:inherit;font-size:inherit;display:block" readonly autocomplete="username" /></strong></label></p>';
+			buf += '<p><label class="label">Battle Code: <input class="textbox autofocus" type="text" name="bcode" autocomplete="new-password" /></label></p>';
+			buf += '<p><label class="label">Replay Code: <input class="textbox" type="text" name="rcode" autocomplete="new-password" /></label></p>';
+			buf += '<p><label class="label"><img src="' + Dex.resourcePrefix + 'sprites/gen5ani/riolu.gif" alt="An Electric-type mouse that is the mascot of the Pok\u00E9mon franchise." /></label></p>';
+			buf += '<p><label class="label">Join As <select name="jas"> <option value="part"> Player </option>  <option value="spect"> Spectate </option>  <option value="r"> Watch Replay </option></select></label></p>';
+			buf += '<p class="buttonbar"><button type="submit"><strong>Join </strong></button> <button type="button" name="close">Cancel</button></p></form>';
+			this.$el.html(buf);
+		},
+		submit: function (data) {
+			var name = data.name;
+			var captcha = data.captcha;
+		
+			console.log(data);
+
+		
+			if (data.jas == "r") {
+				if (data.rcode.length < 2) return app.addPopupMessage("Please enter a replay code");
+				app.send("%hasReplay%" + data.rcode);
+			} 
+			else {
+				if (data.bcode.length < 2) return app.addPopupMessage("Please enter a battle code");
+				if(data.jas == "part") {
+					var temp = JSON.parse(localStorage.getItem("parts"))
+					? JSON.parse(localStorage.getItem("parts"))
+					: {};
+
+				 temp[name] = true;
+				localStorage.setItem("parts", JSON.stringify(temp));
+				}
+				app.send(
+					"%j%" + data.bcode + "%" + data.jas + "%" + localStorage.getItem("token")
+				);
+			} 
+		}
+	});
+
+
+
 	var RegisterPopup = this.RegisterPopup = Popup.extend({
 		type: 'semimodal',
 		initialize: function (data) {
@@ -1031,6 +1082,8 @@
 			}), 'text');
 		}
 	});
+
+	
 
 	this.LoginPasswordPopup = Popup.extend({
 		type: 'semimodal',

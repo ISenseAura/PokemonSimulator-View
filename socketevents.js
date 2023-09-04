@@ -8,8 +8,8 @@ ws.onopen = (event) => {
 	console.log("Testt")
 	
 	ws.send("Here's some text that the server is urgently awaiting!");
-    if(localStorage.getItem("token")) ws.send("%getuser%" + localStorage.getItem("token"));
-	if(localStorage.getItem("battles")) {
+    if(localStorage.getItem("token") && localStorage.getItem("token") != "Guest") ws.send("%getuser%" + localStorage.getItem("token"));
+	if(localStorage.getItem("battles") && localStorage.getItem("token") != "Guest") {
 		let battles = JSON.parse(localStorage.getItem("battles"))
 		battles.forEach((battle) => {
 			if(battle) ws.send(`%hasBattle%${battle.split("-")[2].trim()}%participant%${localStorage.getItem("token")}`)
@@ -29,14 +29,20 @@ ws.onmessage = (event) => {
         let battle = event.data.split("%")[2];
         let secret = battle.split("-")[2];
         
-        console.log(localStorage.getItem("battles"));
+        console.log(localStorage.getItem("replays"));
 
         let battles = localStorage.getItem("battles") ? JSON.parse(localStorage.getItem("battles")) : [];
-        if(!battles.includes(battle)) battles.push(battle)
+        if(!battles.includes(battle) && !battle.endsWith("replay")) battles.push(battle)
         console.log(battles);
         localStorage.setItem("battles",JSON.stringify(battles));
         console.log(localStorage.getItem("battles"));
-        window.location.href = "http://127.0.0.1:5502/simulator.html";
+
+		let replays = localStorage.getItem("replays") ? JSON.parse(localStorage.getItem("replays")) : [];
+        if(!replays.includes(battle) && battle.endsWith("replay")) replays.push(battle)
+        console.log(replays);
+        localStorage.setItem("replays",JSON.stringify(replays));
+        console.log(localStorage.getItem("replays"));
+        window.location.href = "/simulator.html";
     }
 
 
@@ -59,6 +65,21 @@ ws.onmessage = (event) => {
 				localStorage.setItem("battles",JSON.stringify(battles))
 			}
                 alert("Battle Code (" + data[2] + ")" + " is invalid or expired");
+            }
+            break;
+
+			case "noreplay" : {
+				let replays = JSON.parse(localStorage.getItem("replays"))
+				if(battles) {
+				for(let i = 0;i < battles.length;i++) {
+					
+					if(battles[i]) { 
+						if(battles[i].endsWith(data[2])) battles[i] = null;
+					}
+				}
+				localStorage.setItem("replays",JSON.stringify(battles))
+			}
+                alert("Replay  (" + data[2] + ")" + " does not exist");
             }
             break;
 
@@ -105,6 +126,7 @@ ws.onmessage = (event) => {
 					{
 						console.log(data[2]);
 						localStorage.setItem("user",data[2]);
+						//window.location.hrefwindow.location.href = "home.html"
 					}
 					break;
 

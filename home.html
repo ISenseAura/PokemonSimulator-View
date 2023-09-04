@@ -84,7 +84,7 @@
 						</div>
 
 						<div class="inputBox">
-							<input type="password" id="pass" required />
+							<input type="text" id="pass" required />
 							<i>Enter Replay Code</i>
 						</div>
 
@@ -110,6 +110,8 @@ function initU() {
 	let userField = document.getElementById("uf");
 	let logoi = document.getElementById("logoi");
 	let user = JSON.parse(localStorage.getItem("user"));
+	let token = localStorage.getItem("token");
+	if(token && token != "Guest" && !user) window.location.reload();
 	if(!user) return logoi.innerHTML = `<a style="text-decoration: none;color:rgb(47, 106, 255)" onclick="window.location.href='login.html'"> Login</a>`;
 	userField.innerHTML = user.name;
 	logoi.innerHTML = `<a style="text-decoration: none;color:rgb(47, 106, 255)" onclick="logout()"> Logout</a>`;
@@ -125,7 +127,7 @@ function initU() {
 				let pass = document.getElementById("pass").value;
 				let jas = document.getElementById("as").value;
 
-				if (name.length < 4) {
+				if (name.length < 4 && pass < 1) {
 					alert("Battle Code must be 4-letter alphanumeric value");
 					return;
 				}
@@ -156,6 +158,13 @@ function initU() {
 
 				if (jas == "part") temp[name] = true;
 				localStorage.setItem("parts", JSON.stringify(temp));
+
+				if(pass.length > 5) {
+					ws.send("%hasReplay%" + pass.trim());
+					return;
+					//let replays = localStorage.getItem("replays") ? localStorage.getItem("replays") : [];
+					
+				}
 
 				ws.send(
 					"%j%" + name + "%" + jas + "%" + localStorage.getItem("token")
