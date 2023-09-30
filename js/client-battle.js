@@ -3326,6 +3326,7 @@ ChatHistory.prototype.down = function (line) {
 				if (message[i]) buf += message[i] + ',';
 			}
 			this.send(buf.substr(0, buf.length - 1) + '|' + this.request.rqid);
+			this.send("/illinfo " + this.choice.myMoveName);
 		},
 		request: null,
 		receiveRequest: function (request, choiceText) {
@@ -3511,6 +3512,8 @@ ChatHistory.prototype.down = function (line) {
 
 				var target = e.getAttribute('data-target');
 				var choosableTargets = {normal: 1, any: 1, adjacentAlly: 1, adjacentAllyOrSelf: 1, adjacentFoe: 1};
+				console.log(e.getAttribute("data-move"))
+				this.choice.myMoveName = e.getAttribute("data-move");
 
 				this.choice.choices.push('move ' + pos + (isMega ? ' mega' : '') + (isZMove ? ' zmove' : '') + (isUltraBurst ? ' ultra' : '') + (isDynamax ? ' dynamax' : '') + (isTerastal ? ' terastallize' : ''));
 				if (nearActive.length > 1 && target in choosableTargets) {

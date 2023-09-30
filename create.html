@@ -3,11 +3,13 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>using Html &amp; CSS Only</title>
+		<title>  using Html &amp; CSS Only</title>
 
 		<link rel="stylesheet" href="./index.css" />
 		<script src="/config/config.js"></script>
+	
 	</head>
 
 	<body>
@@ -67,111 +69,99 @@
 			<span></span> <span></span> <span></span> <span></span> <span></span>
 			<span></span> <span></span> <span></span> <span></span> <span></span>
 
-
-			
-
 			<div class="signin">
 				<div class="content">
-					<div style="z-index: 5;color:white">
-						<b> Logged in As <a style="text-decoration: none;color:greenyellow" id="uf"> </a>, <i><ins id="logoi"> </ins> </i></b>
-					</div>
-					<h2>Join A Battle</h2>
+					<h2>Create A Battle!</h2>
 
 					<div class="form">
 						<div class="inputBox">
-							<input type="text" id="code" required />
-							<i>Enter Battle Code</i>
+							<input type="text" id="code" required  /> <i>Enter Format (ex. gen7ou)</i>
 						</div>
 
 						<div class="inputBox">
-							<input type="text" id="pass" required />
-							<i>Enter Replay Code</i>
+							<textarea cols="20" rows="10" id="team1" placeholder="Team 1" style="color:black;font-weight: 900;"></textarea> 
+                            <textarea  cols="20" rows="10" id="team2" placeholder="Team 2" style="color:black;font-weight: 900;"></textarea> 
 						</div>
+						<div class="inputBox"><input type="checkbox" id="allow"/><i>Allow Player Teams </i> </div>
+                   
+                        <small style="color: white;">
 
-						<div class="inputBox">
-							<select id="as" placeholder="Join As">
-								<option value="">-- Join As --</option>
-								<option value="part">Player</option>
-								<option value="spect">Spectator</option>
-							</select>
-						</div>
+                            If you are not sure what to enter in Teams, refer <a href="https://pastebin.com/raw/MrM38zep" style="color:yellow;"> this</a> 
 
+
+                        </small>
+					
+			
 						<div class="inputBox">
-							<input type="submit" onClick="joinB()" value="Join Battle" />
+							<input type="submit" onClick="createBattle()" value="Create" />
 						</div>
 					</div>
 				</div>
 			</div>
-		</section>
-		<script src="./socketevents.js"></script>
+	</section>
+	<script src="./socketevents.js"> </script>
 		<script>
 
-function initU() {
-	let userField = document.getElementById("uf");
-	let logoi = document.getElementById("logoi");
-	let user = JSON.parse(localStorage.getItem("user"));
-	let token = localStorage.getItem("token");
-	if(token && token != "Guest" && !user) window.location.reload();
-	if(!user) return logoi.innerHTML = `<a style="text-decoration: none;color:rgb(47, 106, 255)" onclick="window.location.href='login.html'"> Login</a>`;
-	userField.innerHTML = user.name;
-	logoi.innerHTML = `<a style="text-decoration: none;color:rgb(47, 106, 255)" onclick="logout()"> Logout</a>`;
+
+async function createBattle() {
+  let format = document.getElementById("code").value.trim().toLowerCase();
+  let team1 = document.getElementById("team1").value;
+  let team2 = document.getElementById("team2").value;
+  let allow = document.getElementById("allow").checked;
+
+
+ 
+let rt = false;
+
+if(!format.includes("random")) {
+    if(team1.length < 10 || team2.length < 10) {
+        let yn = confirm("You have chosen a format which requires input teams and you have not provided the teams, Would you still like to continue with random teams?")
+        if(!yn) return;
+
+		rt = true;
+    }
 }
-			function logout() {
-				let token = localStorage.getItem("token");
-				if(!token || token == "Guest") return alert("You're not logged in");
-				ws.send("%logout%" + token)
-			}
-	
-			function joinB() {
-				let name = document.getElementById("code").value.trim();
-				let pass = document.getElementById("pass").value;
-				let jas = document.getElementById("as").value;
 
-				if (name.length < 4 && pass < 1) {
-					alert("Battle Code must be 4-letter alphanumeric value");
-					return;
-				}
 
-				if (pass.length > 1 && name.length > 1) {
-					alert(
-						"you cannot join a battle and view a replay at the same time"
-					);
-					return;
-				}
+let data = {
+    "format" : format,
+    "teams" : [team1,team2],
+	"randteam" : rt,
+	"allowteam" : allow
 
-				if (name.length && jas.length < 2)
-					return alert(
-						"Please select whether you're joining as player or spectator"
-					);
+  }
 
-				let token = localStorage.getItem("token");
 
-				if (jas == "part" && !token)
-					return alert("You need to login before joining as a player");
+if(format.includes("random")) { 
+    let data = {
+    "format" : format,
+  }
+}
 
-				if (jas == "spect" && !token)
-					localStorage.setItem("token", "Guest");
+try {
+    const response = await fetch("http://13.235.24.232:8000/create" , {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-				let temp = JSON.parse(localStorage.getItem("parts"))
-					? JSON.parse(localStorage.getItem("parts"))
-					: {};
+    const result = await response.json();
+    
+    console.log(result)
+    if(result.success) {
+        alert("Your Battle Secret : " + result.data)
+    
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
 
-				if (jas == "part") temp[name] = true;
-				localStorage.setItem("parts", JSON.stringify(temp));
 
-				if(pass.length > 5) {
-					ws.send("%hasReplay%" + pass.trim());
-					return;
-					//let replays = localStorage.getItem("replays") ? localStorage.getItem("replays") : [];
-					
-				}
 
-				ws.send(
-					"%j%" + name + "%" + jas + "%" + localStorage.getItem("token")
-				);
-			}
 
-			initU();
 		</script>
 	</body>
 </html>

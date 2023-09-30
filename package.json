@@ -23,6 +23,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "babel-plugin-remove-import-export": "^1.1.1",
     "google-auth-library": "^3.1.2",
+    "http-server": "^14.1.1",
     "image-size": "^0.7.5",
     "request": "^2.88.2"
   },

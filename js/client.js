@@ -5,6 +5,8 @@ function toId() {
 	);
 }
 
+window.formatText = (str,t) => str;
+
 (function ($) {
 	Config.sockjsprefix = "/showdown";
 	Config.root = "/";
@@ -1000,6 +1002,15 @@ function toId() {
 		 */
 
 		conn: function () {
+
+Config.server = {
+	id: '',
+	host: '13.235..24.232',
+	port: 8000,
+	httpport: 8000,
+	altport: 80,
+	registered: true
+};
 			var self = this;
 			var constructSocket = function () {
 				var protocol =
@@ -1033,16 +1044,15 @@ function toId() {
 						console.log(url);
 						return new WebSocket(url);
 					}
-					return new SockJS(
-						protocol +
-							"://" +
+					var url =
+							"ws://" +
 							Config.server.host +
 							":" +
-							Config.server.port +
-							Config.sockjsprefix,
-						[],
-						{ timeout: 5 * 60 * 1000 }
-					);
+							port +
+							Config.sockjsprefix +
+							"/websocket";
+						console.log(url);
+						return new WebSocket(url);
 				} catch (err) {
 					// The most common case this happens is if an HTTPS connection fails,
 					// and we fall back to HTTP, which throws a SecurityError if the URL
@@ -1063,6 +1073,14 @@ function toId() {
 		connect: function () {
 			//	if (this.down) return;
 
+Config.server = {
+	id: '',
+	host: '13.235.24.232',
+	port: 8000,
+	httpport: 8000,
+	altport: 80,
+	registered: true
+};
 			if (Config.bannedHosts) {
 				for (var i = 0; i < Config.bannedHosts.length; i++) {
 					var host = Config.bannedHosts[i];
@@ -1112,16 +1130,9 @@ function toId() {
 						console.log(url);
 						return new WebSocket(url);
 					}
-					return new SockJS(
-						protocol +
-							"://" +
-							Config.server.host +
-							":" +
-							Config.server.port +
-							Config.sockjsprefix,
-						[],
-						{ timeout: 5 * 60 * 1000 }
-					);
+				var url = "ws://" + Config.server.host + ":" + Config.server.port
+						console.log(url);
+						return new WebSocket(url);
 				} catch (err) {
 					// The most common case this happens is if an HTTPS connection fails,
 					// and we fall back to HTTP, which throws a SecurityError if the URL
@@ -1363,8 +1374,8 @@ function toId() {
 
 			console.log("@@-" + data);
 
-			if(data.startsWith("|popup|")) {
-				app.addPopupMessage(data.split("|")[2]);
+			if(data.includes("|popup|")) {
+				app.addPopupMessage(data.split("|")[2].replace(">",""));
 			}
 
 
@@ -1503,6 +1514,10 @@ function toId() {
 				if (nlIndex < 0) return;
 				roomid = toRoomid(data.substr(1, nlIndex - 1));
 				data = data.substr(nlIndex + 1);
+			}
+			if(data.includes("|getillinfo|")) {
+				console.log(roomid);
+				this.rooms[roomid.trim()].receive("|message|"+ data.split("|")[2])
 			}
 			if (data.substr(0, 6) === "|init|") {
 				if (!roomid) roomid = "lobby";

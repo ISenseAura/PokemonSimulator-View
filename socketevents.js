@@ -1,4 +1,4 @@
-var url = "ws://" + Config.defaultserver.host + ":" + Config.defaultserver.port;
+var url = "ws://13.235.24.232:8000";
 
 var ws =  new WebSocket(url);
 console.log(Config);
@@ -117,7 +117,7 @@ ws.onmessage = (event) => {
 
 			case "tokenverified":
 				{
-					window.location.href = "home.html"
+					window.location.href = "index.html"
 					console.log(data[2]);
 				}
 				break;
