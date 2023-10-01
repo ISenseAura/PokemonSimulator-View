@@ -136,6 +136,7 @@ ws.onmessage = (event) => {
 						window.location.reload();
 						localStorage.removeItem("user");
 						localStorage.removeItem("token");
+						localStorage.clear();
 
 					}
 					break;

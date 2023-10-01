@@ -1003,14 +1003,7 @@ window.formatText = (str,t) => str;
 
 		conn: function () {
 
-Config.server = {
-	id: '',
-	host: '13.235..24.232',
-	port: 8000,
-	httpport: 8000,
-	altport: 80,
-	registered: true
-};
+
 			var self = this;
 			var constructSocket = function () {
 				var protocol =
@@ -1073,14 +1066,22 @@ Config.server = {
 		connect: function () {
 			//	if (this.down) return;
 
-Config.server = {
-	id: '',
-	host: '13.235.24.232',
-	port: 8000,
-	httpport: 8000,
-	altport: 80,
-	registered: true
-};
+			Config.server = {
+				id: '',
+				host: 'localhost',
+				port: 8000,
+				protocol: "http",
+				wsProtocol: "ws",
+				httpport: 8000,
+				altport: 80,
+				registered: true
+			};
+			
+			window.serverAddress = Config.serverAddress = Config.server.protocol + "://" + Config.server.host + ":" + Config.server.port;
+			window.wsAddress = Config.serverAddress = Config.server.wsProtocol + "://" + Config.server.host + ":" + Config.server.port;
+
+
+
 			if (Config.bannedHosts) {
 				for (var i = 0; i < Config.bannedHosts.length; i++) {
 					var host = Config.bannedHosts[i];
@@ -1126,11 +1127,11 @@ Config.server = {
 						// thus ensuring a failed connection.
 						var port = possiblePort || Config.server.port;
 						console.log("Bypassing SockJS for localhost");
-						var url = "ws://" + Config.server.host + ":" + port;
+						var url = wsAddress;
 						console.log(url);
 						return new WebSocket(url);
 					}
-				var url = "ws://" + Config.server.host + ":" + Config.server.port
+				var url = wsAddress;
 						console.log(url);
 						return new WebSocket(url);
 				} catch (err) {
