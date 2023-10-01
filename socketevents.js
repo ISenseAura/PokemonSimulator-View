@@ -1,4 +1,4 @@
-var url = "ws://13.235.24.232:8000";
+var url = wsAddress ? wsAddress : "ws://13.235.24.232:8000";
 
 var ws =  new WebSocket(url);
 console.log(Config);

@@ -5,7 +5,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>  using Html &amp; CSS Only</title>
+		<title> Pokemon Battle Mod</title>
 
 		<link rel="stylesheet" href="./index.css" />
 		<script src="/config/config.js"></script>
@@ -139,7 +139,7 @@ if(format.includes("random")) {
 }
 
 try {
-    const response = await fetch("http://13.235.24.232:8000/create" , {
+    const response = await fetch(serverAddress + "/create" , {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
