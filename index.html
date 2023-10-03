@@ -145,7 +145,12 @@
 		}
 		function logout() {
 			let token = localStorage.getItem("token");
-			if (!token || token == "Guest") return alert("You're not logged in");
+			if (!token) return alert("You're not logged in");
+			if(token == "Guest") {
+				localStorage.removeItem("token")
+				localStorage.removeItem("user");
+				window.location.reload();
+			}
 			ws.send("%logout%" + token)
 		}
 
@@ -173,18 +178,20 @@
 
 			let token = localStorage.getItem("token");
 
-			if (jas == "part" && !token)
+			if (jas == "part" && !token && token == "Guest")
 				return alert("You need to login before joining as a player");
 
 			if (jas == "spect" && !token)
 				localStorage.setItem("token", "Guest");
 
-			let temp = JSON.parse(localStorage.getItem("parts"))
+			let temp = typeof JSON.parse(localStorage.getItem("parts")) == typeof {}
 				? JSON.parse(localStorage.getItem("parts"))
 				: {};
 
+		
 			if (jas == "part") temp[name] = true;
 			localStorage.setItem("parts", JSON.stringify(temp));
+			
 
 			if (pass.length > 5) {
 				ws.send("%hasReplay%" + pass.trim());
@@ -193,11 +200,14 @@
 
 			}
 
-			
+			let tok = localStorage.getItem("token");
+
+			if(tok == "Guest" && JSON.parse(localStorage.getItem("user"))){
+				tok = JSON.parse(localStorage.getItem("user")).name.startsWith("Guest") ? JSON.parse(localStorage.getItem("user")).name : tok;
+			}
 
 			ws.send(
-				"%j%" + name + "%" + jas + "%" + localStorage.getItem("token")
-			);
+				"%j%" + name + "%" + jas + "%" + tok );
 		}
 
 		initU();

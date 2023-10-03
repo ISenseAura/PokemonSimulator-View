@@ -1149,6 +1149,13 @@ window.formatText = (str,t) => str;
 			var altprefix = false;
 
 			this.socket.onopen = function () {
+				console.log(!localStorage.getItem("token"));
+				if(!localStorage.getItem("token")) localStorage.setItem("token","Guest")
+				if(localStorage.getItem("token") == "Guest" && !JSON.parse(localStorage.getItem("user"))){
+					console.log("test")
+					self.send("%initguest%");
+					localStorage.setItem("parts",JSON.stringify({}))
+				};
 				let battles = JSON.parse(localStorage.getItem("battles"));
 				let replays = JSON.parse(localStorage.getItem("replays"));
 
@@ -1275,20 +1282,25 @@ window.formatText = (str,t) => str;
 			//if(!this.socketopened) return;
 
 			if (window.console && console.log) {
-				console.log("@>> " + data);
+				console.log("[SENT] " + data);
+
 				console.log(room)
 			}
 			var url = "ws://localhost:8000";
+			let realToken = localStorage.getItem("token");
+			if(localStorage.getItem("user")) {
+				if(JSON.parse(localStorage.getItem("user")).name) {
+
+					if(JSON.parse(localStorage.getItem("user")).name.startsWith("Guest")) realToken = JSON.parse(localStorage.getItem("user")).name
+				}
+			}
 
 			this.socket.send(
 				data +
 					"|" +
 					(room ? room : "") +
 					"|" +
-					(localStorage.getItem("token")
-						? localStorage.getItem("token")
-						: "")
-			);
+					realToken			);
 		},
 		serializeForm: function (form, checkboxOnOff) {
 			// querySelector dates back to IE8 so we can use it
@@ -1373,7 +1385,7 @@ window.formatText = (str,t) => str;
 			//app.rooms['battle-gen9randombattle-1899991734'].receive(data);
 			var autojoined = false;
 
-			console.log("@@-" + data);
+			console.log("[RECEIVED] " + data);
 
 			if(data.includes("|popup|")) {
 				app.addPopupMessage(data.split("|")[2].replace(">",""));
@@ -1400,6 +1412,17 @@ window.formatText = (str,t) => str;
 						app.joinRoom(battle.trim());
 						this.send("/viewreplay |" + battle.trim())
 						//self.rooms[battle.trim()].receive("|j|"+ self.user.name)
+						return;
+			}
+
+			if(data.startsWith("%sessionexpired%")){
+				
+				app.addPopupMessage("Invalid Session : Account has been logged in somewhere")
+				localStorage.removeItem("token");
+				localStorage.removeItem("user")
+				setTimeout(() => {
+					window.location.href = "/";
+				},1500)
 						return;
 			}
 			
@@ -1445,12 +1468,12 @@ window.formatText = (str,t) => str;
 					app.rooms[battle.trim()].receive("|notstarted|")
 					app.rooms[battle.trim()].receive("|slotupdate|1")
 					part = "part";
-					app.rooms[battle.trim()].receive("|j|"+ (user ? user.name : "Guest"))
+					//app.rooms[battle.trim()].receive("|j|"+ (user ? user.name : "Guest"))
 					} 
 					else {
 						app.rooms[battle.trim()].receive("|notstarted|")
 						app.rooms[battle.trim()].receive("|slotupdate|2")
-						app.rooms[battle.trim()].receive("|j|"+ app.user.name)
+						//app.rooms[battle.trim()].receive("|j|"+ user.name)
 					}
 			
 				
@@ -1465,6 +1488,17 @@ window.formatText = (str,t) => str;
 		let battles = localStorage.getItem("battles") ? JSON.parse(localStorage.getItem("battles")) : [];
 		switch (data[1]) {
 
+			case "initguest" : {
+				if(JSON.parse(localStorage.getItem("user"))) return;
+				let us = {
+					name : data[2],
+					id : data[2].toLowerCase(),
+					avatar : 123
+				}
+				window.location.reload();
+				localStorage.setItem("user",JSON.stringify(us));
+			}
+			break;
             case "nobattle" : {
 				let battles = JSON.parse(localStorage.getItem("battles"))
 				if(battles) {

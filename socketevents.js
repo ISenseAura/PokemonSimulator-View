@@ -3,6 +3,8 @@ var url = wsAddress ? wsAddress : "ws://13.235.24.232:8000";
 var ws =  new WebSocket(url);
 console.log(Config);
 
+//if(localStorage.getItem("token") == "Guest") localStorage.clear();
+
 
 ws.onopen = (event) => {
 	console.log("Testt")
@@ -64,7 +66,7 @@ ws.onmessage = (event) => {
 				}
 				localStorage.setItem("battles",JSON.stringify(battles))
 			}
-                alert("Battle Code (" + data[2] + ")" + " is invalid or expired");
+                console.log("Battle Code (" + data[2] + ")" + " is invalid or expired");
             }
             break;
 
@@ -115,6 +117,17 @@ ws.onmessage = (event) => {
 				}
 				break;
 
+			
+				case "sessionexpired" : {
+					localStorage.removeItem("token");
+					localStorage.removeItem("user")
+					alert("Invalid Session : Account has been logged in somewhere")
+					setTimeout(() => {
+						window.location.href = "/";
+					},1500)
+							return;
+				}
+				
 			case "tokenverified":
 				{
 					window.location.href = "index.html"
@@ -136,7 +149,7 @@ ws.onmessage = (event) => {
 						window.location.reload();
 						localStorage.removeItem("user");
 						localStorage.removeItem("token");
-						localStorage.clear();
+						localStorage.removeItem("parts");
 
 					}
 					break;

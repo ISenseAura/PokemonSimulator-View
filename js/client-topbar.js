@@ -986,6 +986,8 @@
 		}
 	});
 
+
+
 	var JoinRoomPopup = this.JoinRoomPopup = Popup.extend({
 		type: 'modal',
 		initialize: function (data) {
@@ -1019,6 +1021,7 @@
 			else {
 				if (data.bcode.length < 2) return app.addPopupMessage("Please enter a battle code");
 				if(data.jas == "part") {
+					if(!localStorage.getItem("token")) return app.addPopupMessage("You need to login before joining battle as player")
 					var temp = JSON.parse(localStorage.getItem("parts"))
 					? JSON.parse(localStorage.getItem("parts"))
 					: {};
@@ -1027,7 +1030,7 @@
 				localStorage.setItem("parts", JSON.stringify(temp));
 				}
 				app.send(
-					"%j%" + data.bcode + "%" + data.jas + "%" + localStorage.getItem("token")
+					"%j%" + data.bcode + "%" + data.jas + "%" + (localStorage.getItem("token") ? localStorage.getItem("token") : "Guest")
 				);
 			} 
 		}
