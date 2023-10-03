@@ -184,7 +184,7 @@
 			if (jas == "spect" && !token)
 				localStorage.setItem("token", "Guest");
 
-			let temp = typeof JSON.parse(localStorage.getItem("parts")) == typeof {}
+			let temp = JSON.parse(localStorage.getItem("parts")) 
 				? JSON.parse(localStorage.getItem("parts"))
 				: {};
 

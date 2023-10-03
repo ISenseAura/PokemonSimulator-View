@@ -2307,7 +2307,9 @@ ChatHistory.prototype.down = function (line) {
 			this.$el.addClass('ps-room-opaque').html('<div class="battle">Battle is here</div><div class="foehint"></div><div class="battle-log" aria-label="Battle Log" role="complementary"></div><div class="battle-log-add">Connecting...</div><ul class="battle-userlist userlist userlist-minimized"></ul><div class="battle-controls" role="complementary" aria-label="Battle Controls"></div><br> <button class="battle-chat-toggle button" name="showChat"><i class="fa fa-caret-left"></i> Chat</button>');
 
 			this.$battle = this.$el.find('.battle');
+			this.$rightbar = this.$el.find('.rightbar');
 			this.$controls = this.$el.find('.battle-controls');
+			//alert(JSON.stringify(this.$rightbar))
 			this.$chatFrame = this.$el.find('.battle-log');
 			this.$chatAdd = this.$el.find('.battle-log-add');
 			this.$foeHint = this.$el.find('.foehint');
@@ -2506,6 +2508,30 @@ ChatHistory.prototype.down = function (line) {
 					console.log(this.id)
 				//	app.removeBattle(this.id);
 				} else if (logLine.substr(0, 6) === '|chat|' || logLine.substr(0, 3) === '|c|' || logLine.substr(0, 4) === '|c:|' || logLine.substr(0, 9) === '|chatmsg|' || logLine.substr(0, 10) === '|inactive|') {
+					let opts = logLine.split("|");
+					let u = toUserid(opts[2]);
+					let msg = opts[3].split("");
+					let tosend = msg.join("");
+					if(msg.length > 30) {
+						tosend = "";
+						for(let i = 0; i < 30;i++) {
+							tosend += msg[i]
+						}
+						tosend += "..";
+					}
+
+					console.log(tosend)
+
+					if(u != JSON.parse(localStorage.getItem("user")).id) {
+					
+						if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
+						if(!this.$el.find("minimessagebar").length) this.$el.find(".rightbar").append('<div class="minimessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.95;"> <div style="display: block; font-size:9px; height: 100%;opacity:0.95;"><strong style="font-size:8px;color:#ffffff;margin:1px;" class="minimsg" > ' + tosend + '</strong></div></div>')
+						if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html(tosend);
+					 setTimeout(() => {
+
+						this.$el.find("minimsg").html("");
+						},5000)
+					}
 					this.battle.instantAdd(logLine);
 				} else {
 					this.battle.stepQueue.push(logLine);
@@ -2589,6 +2615,8 @@ ChatHistory.prototype.down = function (line) {
 				}
 
 			} else if (this.side) {
+
+				this.$rightbar.html('<div class="guestminimessagebar" style="background: black;height:20px;margin-left-20px;opacity:0.95;"> <div style="display: block; font-size:9px; height: 100%;opacity:0.95;"><strong style="font-size:8px;color:#ffffff;margin:1px;"> Hello, whats is this...</strong></div></div>')
 
 				// player
 				this.controlsShown = true;
