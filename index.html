@@ -178,7 +178,7 @@
 
 			let token = localStorage.getItem("token");
 
-			if (jas == "part" && !token && token == "Guest")
+			if (jas == "part" && (!token || token == "Guest"))
 				return alert("You need to login before joining as a player");
 
 			if (jas == "spect" && !token)
