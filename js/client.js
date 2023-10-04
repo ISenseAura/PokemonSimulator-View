@@ -1358,8 +1358,9 @@ window.formatText = (str,t) => str;
 			console.log("Removing Battle " + id);
 			console.log(battles);
 			if(battles[id]) battles[id] = null;
+			var newBattles = battles.filter(Boolean).join(', ');
 			if(parts[[id.startsWith("battle") ? id.split("-")[2] : id]]) delete parts[id.startsWith("battle") ? id.split("-")[2] : id];
-			localStorage.setItem("battles",JSON.stringify(battles));
+			localStorage.setItem("battles",JSON.stringify(newBattles));
 			localStorage.setItem("parts",JSON.stringify(parts));
 		},
 
@@ -2608,6 +2609,7 @@ window.formatText = (str,t) => str;
 			var room = this.rooms[id];
 			if (!room) return false;
 			if (room.requestLeave && !room.requestLeave(e)) return false;
+			if(id.startsWith("battle")) this.removeBattle(id);
 			return this.removeRoom(id);
 		},
 		renameRoom: function (id, newid, newtitle) {
