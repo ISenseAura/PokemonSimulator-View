@@ -2314,6 +2314,8 @@ ChatHistory.prototype.down = function (line) {
 			this.$chatAdd = this.$el.find('.battle-log-add');
 			this.$foeHint = this.$el.find('.foehint');
 
+			this.msgTimers = {};
+
 			BattleSound.setMute(Dex.prefs('mute'));
 			this.battle = new Battle({
 				id: this.id,
@@ -2524,13 +2526,14 @@ ChatHistory.prototype.down = function (line) {
 					console.log(tosend)
 
 					if(u != JSON.parse(localStorage.getItem("user")).id) {
-					
+						if(this.msgTimers["g"]) clearTimeout(this.msgTimers["g"])
+
 						if(this.battle.p1.id != u && this.battle.p2.id != u ) {
 							this.$el.find("#guestmessagebar").css("display","block");
 							//	if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
 								if(!this.$el.find(".guestmessagebar").length) this.$el.find(".rightbar").append('<div class="guestmessagebar" id="guestmessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.85;"> <div style="display: block; font-size:9px; height: 100%;opacity:1;"><strong style="font-size:8px;color:#ffffff;" > <div class="gminimsg" id="gminimsg"> ' + opts[2] + ": " + tosend + ' </div></strong></div></div>')
 								if(this.$el.find(".guestmessagebar").length) this.$el.find("#gminimsg").html(opts[2] + " : " + tosend);
-							 setTimeout((ele) => {
+							this.msgTimers["g"] = setTimeout((ele) => {
 		
 								console.log("Timeout Calledd")
 								try {
@@ -2543,12 +2546,13 @@ ChatHistory.prototype.down = function (line) {
 
 		else if (this.battle.p1.id != me.id && this.battle.p2.id != me.id) {
 			if(this.battle.farSide.id !== u) {
+				if(this.msgTimers["l"]) clearTimeout(this.msgTimers["l"])
 		
 					this.$el.find("#lminimessagebar").css("display","block");
 				//	if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
 					if(!this.$el.find(".lminimessagebar").length) this.$el.find(".leftbar").append('<div class="lminimessagebar" id="lminimessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.85;"> <div style="display: block; font-size:9px; height: 100%;opacity:1;"><strong style="font-size:8px;color:#ffffff;" > <div class="minimsg" id="lminimsg"> ' + tosend + ' </div></strong></div></div>')
 					if(this.$el.find(".lminimessagebar").length) this.$el.find("#lminimsg").html(tosend);
-				 setTimeout((ele) => {
+				this.msgTimers["l"] = setTimeout((ele) => {
 
 					console.log("Timeout Calledd")
 					try {
@@ -2561,11 +2565,13 @@ ChatHistory.prototype.down = function (line) {
 
 			}
 			else {
+				if(this.msgTimers["r"]) clearTimeout(this.msgTimers["r"])
+
 				this.$el.find("#minimessagebar").css("display","block");
 			//	if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
 				if(!this.$el.find(".minimessagebar").length) this.$el.find(".rightbar").append('<div class="minimessagebar" id="minimessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.85;"> <div style="display: block; font-size:9px; height: 100%;opacity:1;"><strong style="font-size:8px;color:#ffffff;" > <div class="minimsg" id="minimsg"> ' + tosend + ' </div></strong></div></div>')
 				if(this.$el.find(".minimessagebar").length) this.$el.find("#minimsg").html(tosend);
-			 setTimeout((ele) => {
+			this.msgTimers["r"] = setTimeout((ele) => {
 
 				console.log("Timeout Calledd")
 				try {
