@@ -1065,7 +1065,7 @@ window.formatText = (str,t) => str;
 
 		connect: function () {
 			//	if (this.down) return;
-
+/*
 			Config.server = {
 				id: '',
 				host: 'localhost',
@@ -1075,7 +1075,7 @@ window.formatText = (str,t) => str;
 				httpport: 8000,
 				altport: 80,
 				registered: true
-			};
+			};*/
 			
 			window.serverAddress = Config.serverAddress = Config.server.protocol + "://" + Config.server.host + ":" + Config.server.port;
 			window.wsAddress = Config.serverAddress = Config.server.wsProtocol + "://" + Config.server.host + ":" + Config.server.port;
