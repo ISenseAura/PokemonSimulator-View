@@ -383,11 +383,12 @@ License: GPLv2
 .minimessagebar {
    
     color: white;
-    background:black;
+	background: #222222;
+	background: rgba(0,0,0,0.75);
     border-radius: 6px;
 	width: 100px;
+	padding:2px;
 	border-bottom-right-radius:0px;
-    padding: 2px 2px 0 2px;
     overflow: hidden;
 		text-align: left;
 		position: absolute;
@@ -398,16 +399,41 @@ License: GPLv2
 }
 
 
+.lminimessagebar {
+   
+    color: white;
+	background: #222222;
+	background: rgba(0,0,0,0.75);
+    border-radius: 6px;
+	width: 100px;
+	padding:2px;
+	border-bottom-left-radius:0px;
+    overflow: hidden;
+		text-align: left;
+		position: absolute;
+		left: 70px;
+		right: 0;
+		bottom:220px;
+	
+}
+
+.minimsg {
+	font-size:9px;
+	margin:2px;
+}
+
+
 .guestmessagebar {
    
     color: white;
-    background:black;
+	background: #222222;
+	background: rgba(0,0,0,0.75);
     border-radius: 6px;
 	border-bottom-right-radius:0px;
     padding: 1px 2px 0 2px;
-	width:fit-content;
+	width:100px;
     overflow: hidden;
-		text-align: center;
+		text-align: left;
 		position: absolute;
 		left: 0px;
 		right: 0;

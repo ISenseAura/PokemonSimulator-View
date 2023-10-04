@@ -1425,6 +1425,22 @@ window.formatText = (str,t) => str;
 				},1500)
 						return;
 			}
+
+			if(data.startsWith("%notpart%")){
+				let bt = data.split("%")[2];
+				let code = bt.split("-")[2];
+				app.addPopupMessage("You are no longer a participant of battle " + bt)
+				
+				let parts = JSON.parse(localStorage.getItem("parts"));
+				delete parts[code];
+				localStorage.setItem("parts",JSON.stringify(parts))
+				console.log("Parts Update : " + parts);
+
+				app.send("%j%" + code + "%" + "spect" + "%" + localStorage.getItem("token"))
+			//	localStorage.removeItem("user")
+			
+						return;
+			}
 			
 
 
@@ -1505,6 +1521,7 @@ window.formatText = (str,t) => str;
 				for(let i = 0;i < battles.length;i++) {
 					
 					if(battles[i]) { 
+						
 						if(battles[i].endsWith(data[2])) battles[i] = null;
 					}
 				}

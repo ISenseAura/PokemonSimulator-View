@@ -2512,6 +2512,7 @@ ChatHistory.prototype.down = function (line) {
 					let u = toUserid(opts[2]);
 					let msg = opts[3].split("");
 					let tosend = msg.join("");
+					let me = JSON.parse(localStorage.getItem("user"))
 					if(msg.length > 30) {
 						tosend = "";
 						for(let i = 0; i < 30;i++) {
@@ -2524,13 +2525,72 @@ ChatHistory.prototype.down = function (line) {
 
 					if(u != JSON.parse(localStorage.getItem("user")).id) {
 					
-						if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
-						if(!this.$el.find("minimessagebar").length) this.$el.find(".rightbar").append('<div class="minimessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.95;"> <div style="display: block; font-size:9px; height: 100%;opacity:0.95;"><strong style="font-size:8px;color:#ffffff;margin:1px;" class="minimsg" > ' + tosend + '</strong></div></div>')
-						if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html(tosend);
-					 setTimeout(() => {
+						if(this.battle.p1.id != u && this.battle.p2.id != u ) {
+							this.$el.find("#guestmessagebar").css("display","block");
+							//	if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
+								if(!this.$el.find(".guestmessagebar").length) this.$el.find(".rightbar").append('<div class="guestmessagebar" id="guestmessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.85;"> <div style="display: block; font-size:9px; height: 100%;opacity:1;"><strong style="font-size:8px;color:#ffffff;" > <div class="gminimsg" id="gminimsg"> ' + opts[2] + ": " + tosend + ' </div></strong></div></div>')
+								if(this.$el.find(".guestmessagebar").length) this.$el.find("#gminimsg").html(opts[2] + " : " + tosend);
+							 setTimeout((ele) => {
+		
+								console.log("Timeout Calledd")
+								try {
+								ele.find("#gminimsg").html("");
+								ele.find("#guestmessagebar").css("display","none");
+							
+								} catch(e) {console.log(e.message)}
+								},5000,this.$el)
+						}
 
-						this.$el.find("minimsg").html("");
-						},5000)
+		else if (this.battle.p1.id != me.id && this.battle.p2.id != me.id) {
+			if(this.battle.farSide.id !== u) {
+		
+					this.$el.find("#lminimessagebar").css("display","block");
+				//	if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
+					if(!this.$el.find(".lminimessagebar").length) this.$el.find(".leftbar").append('<div class="lminimessagebar" id="lminimessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.85;"> <div style="display: block; font-size:9px; height: 100%;opacity:1;"><strong style="font-size:8px;color:#ffffff;" > <div class="minimsg" id="lminimsg"> ' + tosend + ' </div></strong></div></div>')
+					if(this.$el.find(".lminimessagebar").length) this.$el.find("#lminimsg").html(tosend);
+				 setTimeout((ele) => {
+
+					console.log("Timeout Calledd")
+					try {
+					ele.find("#lminimsg").html("");
+					ele.find("#lminimessagebar").css("display","none");
+				
+					} catch(e) {console.log(e.message)}
+					},5000,this.$el)
+				
+
+			}
+			else {
+				this.$el.find("#minimessagebar").css("display","block");
+			//	if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
+				if(!this.$el.find(".minimessagebar").length) this.$el.find(".rightbar").append('<div class="minimessagebar" id="minimessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.85;"> <div style="display: block; font-size:9px; height: 100%;opacity:1;"><strong style="font-size:8px;color:#ffffff;" > <div class="minimsg" id="minimsg"> ' + tosend + ' </div></strong></div></div>')
+				if(this.$el.find(".minimessagebar").length) this.$el.find("#minimsg").html(tosend);
+			 setTimeout((ele) => {
+
+				console.log("Timeout Calledd")
+				try {
+				ele.find("#minimsg").html("");
+				ele.find("#minimessagebar").css("display","none");
+			
+				} catch(e) {console.log(e.message)}
+				},5000,this.$el)
+			}
+		}
+						else {
+						this.$el.find("#minimessagebar").css("display","block");
+					//	if(this.$el.find("minimessagebar").length) this.$el.find("minimsg").html("");
+						if(!this.$el.find(".minimessagebar").length) this.$el.find(".rightbar").append('<div class="minimessagebar" id="minimessagebar" style="background: black;height:23px;margin-left-20px;opacity:0.85;"> <div style="display: block; font-size:9px; height: 100%;opacity:1;"><strong style="font-size:8px;color:#ffffff;" > <div class="minimsg" id="minimsg"> ' + tosend + ' </div></strong></div></div>')
+						if(this.$el.find(".minimessagebar").length) this.$el.find("#minimsg").html(tosend);
+					 setTimeout((ele) => {
+
+						console.log("Timeout Calledd")
+						try {
+						ele.find("#minimsg").html("");
+						ele.find("#minimessagebar").css("display","none");
+					
+						} catch(e) {console.log(e.message)}
+						},5000,this.$el)
+					}
 					}
 					this.battle.instantAdd(logLine);
 				} else {
