@@ -13,6 +13,9 @@ ws.onopen = (event) => {
     if(localStorage.getItem("token") && localStorage.getItem("token") != "Guest") ws.send("%getuser%" + localStorage.getItem("token"));
 	if(localStorage.getItem("battles") && localStorage.getItem("token") != "Guest") {
 		let battles = JSON.parse(localStorage.getItem("battles"))
+		if(typeof battles != typeof []) battles = new Array(battles);
+		localStorage.setItem("battles",JSON.parse(battles));
+
 		battles.forEach((battle) => {
 			if(battle) ws.send(`%hasBattle%${battle.split("-")[2].trim()}%participant%${localStorage.getItem("token")}`)
 		})

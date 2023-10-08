@@ -1157,9 +1157,11 @@ window.formatText = (str,t) => str;
 					localStorage.setItem("parts",JSON.stringify({}))
 				};
 				let battles = JSON.parse(localStorage.getItem("battles"));
+				console.log(battles);
+				
 				let replays = JSON.parse(localStorage.getItem("replays"));
 
-				self.send("%validateToken%" + localStorage.getItem("token"));
+				self.send("%validateToken%" + JSON.parse(localStorage.getItem("user")).id + "%" + localStorage.getItem("token"));
 				
 				if(replays) {
 					replays.forEach((r) => {
@@ -1170,7 +1172,7 @@ window.formatText = (str,t) => str;
 				localStorage.removeItem("replays")
 
 				console.log(battles);
-				
+				if(typeof battles != typeof []) battles = new Array(battles);
 				battles.forEach((battle) => {
 					if (!battle) {
 						//Do battle expiration stuff here later
@@ -1355,6 +1357,8 @@ window.formatText = (str,t) => str;
 			
 			let battles = JSON.parse(localStorage.getItem("battles"));
 			let parts = JSON.parse(localStorage.getItem("parts"));
+			if(typeof battles != typeof []) battles = new Array(battles);
+
 			console.log("Removing Battle " + id);
 			console.log(battles);
 			if(battles[id]) battles[id] = null;
