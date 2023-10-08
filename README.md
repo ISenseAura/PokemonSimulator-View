@@ -1,6 +1,9 @@
 Pokémon Showdown Client
 ========================================================================
 
+A custom pokemon showdown client
+live at http://13.235.24.232:8080/
+
 Navigation: [Website][1] | [Server repository][2] | **Client repository** | [Dex repository][3]
 
   [1]: http://pokemonshowdown.com/
