@@ -1362,8 +1362,9 @@ window.formatText = (str,t) => str;
 			console.log("Removing Battle " + id);
 			console.log(battles);
 			if(battles[id]) battles[id] = null;
-			var newBattles = battles.filter(Boolean).join(', ');
+			var newBattles = battles.filter(Boolean).join(',').split(",");
 			if(parts[[id.startsWith("battle") ? id.split("-")[2] : id]]) delete parts[id.startsWith("battle") ? id.split("-")[2] : id];
+			if(typeof newBattles != typeof []) newBattles = new Array(newBattles);
 			localStorage.setItem("battles",JSON.stringify(newBattles));
 			localStorage.setItem("parts",JSON.stringify(parts));
 		},

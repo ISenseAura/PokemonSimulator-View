@@ -133,7 +133,7 @@ ws.onmessage = (event) => {
 				
 			case "tokenverified":
 				{
-					window.location.href = "index.html"
+					if(window.location.href != "index.html") window.location.href = "index.html"
 					console.log(data[2]);
 				}
 				break;

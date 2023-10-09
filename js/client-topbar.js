@@ -1026,13 +1026,15 @@
 					? JSON.parse(localStorage.getItem("parts"))
 					: {};
 
-				 temp[name] = true;
+					console.log(name);
+				 temp[data.bcode] = true;
 				localStorage.setItem("parts", JSON.stringify(temp));
 				}
 				app.send(
 					"%j%" + data.bcode + "%" + data.jas + "%" + (localStorage.getItem("token") ? localStorage.getItem("token") : "Guest")
 				);
 			} 
+			this.close();
 		}
 	});
 
