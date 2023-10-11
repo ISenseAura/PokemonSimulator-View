@@ -429,7 +429,7 @@ var Room = Backbone.View.extend({
 				app.addPopupMessage("Your message is too long.");
 				return;
 			} else if (text) {
-				this.send(text);
+				this.send("/chatmsg " + text);
 			}
 			this.$chatbox.val('');
 			this.$chatbox.trigger('keyup'); // force a resize

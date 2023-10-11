@@ -1021,7 +1021,7 @@
 			else {
 				if (data.bcode.length < 2) return app.addPopupMessage("Please enter a battle code");
 				if(data.jas == "part") {
-					if(!localStorage.getItem("token")) return app.addPopupMessage("You need to login before joining battle as player")
+					if(!localStorage.getItem("token") || localStorage.getItem("token") == "Guest") return app.addPopupMessage("You need to login before joining battle as player")
 					var temp = JSON.parse(localStorage.getItem("parts"))
 					? JSON.parse(localStorage.getItem("parts"))
 					: {};

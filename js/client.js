@@ -1423,12 +1423,14 @@ window.formatText = (str,t) => str;
 
 			if(data.startsWith("%sessionexpired%")){
 				
-				app.addPopupMessage("Invalid Session : Account has been logged in somewhere")
+				app.addPopupMessage("Invalid Session : Account has been logged in somewhere; Redirecting in 10secs.")
 				localStorage.removeItem("token");
-				localStorage.removeItem("user")
+				localStorage.removeItem("user");
+				localStorage.removeItem("battles");
+				localStorage.removeItem("parts");
 				setTimeout(() => {
 					window.location.href = "/";
-				},1500)
+				},10000)
 						return;
 			}
 
